@@ -1,0 +1,10 @@
+fastapi==0.104.1
+uvicorn==0.24.0
+python-multipart==0.0.6
+transformers==4.35.0
+torch==2.1.0
+textstat==0.7.3
+nltk==3.8.1
+python-docx==0.8.11
+pymupdf==1.23.5
+python-dotenv==1.0.0
