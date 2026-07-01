@@ -179,15 +179,14 @@
     <!-- TopNavBar (Shared) -->
     <header class="bg-surface-container w-full top-0 border-b border-outline-variant z-50 sticky">
         <nav class="flex justify-between items-center h-16 px-margin-desktop max-w-container-max mx-auto">
-            <div class="flex items-center gap-stack-md cursor-pointer" onclick="navigateTo('home')">
+            <div class="flex items-center gap-stack-md cursor-pointer" onclick="navigateTo('upload')">
                 <span class="font-headline-lg text-headline-lg font-bold text-secondary flex items-center gap-2">
                     <span class="material-symbols-outlined text-secondary text-3xl">psychology</span>
                     AI Detector
                 </span>
             </div>
             <div class="hidden md:flex gap-8 items-center">
-                <button id="nav-home" class="font-body-md text-body-md text-secondary font-bold border-b-2 border-secondary pb-1 transition-all" onclick="navigateTo('home')">Home</button>
-                <button id="nav-scan" class="font-body-md text-body-md text-on-surface-variant hover:text-secondary transition-colors duration-200" onclick="navigateTo('upload')">Scan</button>
+                <button id="nav-scan" class="font-body-md text-body-md text-secondary font-bold border-b-2 border-secondary pb-1 transition-all" onclick="navigateTo('upload')">Scan</button>
                 <button id="nav-about" class="font-body-md text-body-md text-on-surface-variant hover:text-secondary transition-colors duration-200" onclick="alert('AI Detector V4.2 - High precision semantic analysis engine.')">About</button>
             </div>
             <div class="flex items-center gap-stack-md">
@@ -200,165 +199,25 @@
     <!-- Main Container -->
     <main class="flex-grow">
 
-        <!-- ================= HOME VIEW ================= -->
-        <section id="view-home" class="view-section">
-            <div class="relative overflow-hidden hero-gradient py-20 md:py-28">
-                <div class="max-w-container-max mx-auto px-margin-desktop relative z-10 flex flex-col items-center text-center">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 tonal-layer-1 rounded-full mb-stack-lg border border-outline-variant/30">
-                        <span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
-                        <span class="font-label-caps text-label-caps text-on-surface-variant uppercase">New: Per-Paragraph Analysis Engine</span>
-                    </div>
-                    <h1 class="font-headline-xl text-headline-xl md:text-[64px] md:leading-[72px] mb-6 max-w-4xl tracking-tight">
-                        AI Content Detector
-                    </h1>
-                    <p class="font-body-md text-body-md md:text-xl text-on-surface-variant max-w-2xl mb-stack-lg">
-                        Find out how much AI-generated content is in your document. Precise, instant verification for educators, editors, and professionals.
-                    </p>
-                    <div class="flex flex-col sm:flex-row gap-stack-md w-full sm:w-auto">
-                        <button onclick="navigateTo('upload')" class="bg-[#fe7f2d] text-white px-8 py-4 font-semibold text-lg accent-glow-orange hover:brightness-110 hover:-translate-y-0.5 active:translate-y-0 transition-all rounded-xl flex items-center justify-center gap-2">
-                            <span class="material-symbols-outlined">upload_file</span>
-                            Upload & Scan
-                        </button>
-                        <button onclick="trySampleText(1)" class="bg-transparent border border-outline-variant text-on-surface px-8 py-4 font-semibold text-lg hover:bg-surface-container-high transition-all rounded-xl flex items-center justify-center gap-2">
-                            <span class="material-symbols-outlined">description</span>
-                            Try AI Sample
-                        </button>
-                        <button onclick="trySampleText(2)" class="bg-transparent border border-outline-variant text-on-surface px-8 py-4 font-semibold text-lg hover:bg-surface-container-high transition-all rounded-xl flex items-center justify-center gap-2">
-                            <span class="material-symbols-outlined">person</span>
-                            Try Human Sample
-                        </button>
-                    </div>
-                    
-                    <!-- Analysis Preview Card -->
-                    <div class="mt-20 w-full max-w-4xl relative tonal-layer-1 p-stack-lg rounded-xl overflow-hidden group">
-                        <div class="scanner-line"></div>
-                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8 border-b border-outline-variant pb-6">
-                            <div class="text-left">
-                                <span class="font-label-caps text-label-caps text-on-tertiary-fixed-variant uppercase tracking-widest">Active Analysis Demo</span>
-                                <div class="font-headline-lg text-headline-lg text-primary-fixed mt-1">document_draft_v2.docx</div>
-                            </div>
-                            <div class="flex gap-4">
-                                <div class="tonal-layer-2 px-4 py-2 rounded-lg text-center min-w-[100px]">
-                                    <div class="font-mono-data text-mono-data text-secondary text-lg">82%</div>
-                                    <div class="font-label-caps text-label-caps opacity-60 text-xs">PROBABILITY</div>
-                                </div>
-                                <div class="tonal-layer-2 px-4 py-2 rounded-lg text-center min-w-[100px]">
-                                    <div class="font-mono-data text-mono-data text-tertiary text-lg">14.2</div>
-                                    <div class="font-label-caps text-label-caps opacity-60 text-xs">BURSTINESS</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="text-left font-body-md text-on-surface-variant leading-relaxed space-y-4">
-                            <p class="p-2 border-l-2 border-transparent hover:border-secondary hover:bg-surface-container transition-all">
-                                Large language models are transforming how we communicate. However, the need for transparency in academic and professional writing remains paramount.
-                            </p>
-                            <p class="p-2 bg-[#fe7f2d]/10 border-l-2 border-[#fe7f2d] text-on-surface">
-                                This specific paragraph shows significant markers of AI influence. The syntactic structure exhibits low perplexity scores and predictable burstiness patterns commonly associated with GPT-4 outputs.
-                            </p>
-                            <p class="p-2 border-l-2 border-transparent">
-                                As detection tools evolve, human verification remains the ultimate standard for content authenticity and brand trust.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Features Bento Grid -->
-            <section class="py-24 px-margin-desktop max-w-container-max mx-auto">
-                <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
-                    <!-- Feature 1: LLM Coverage -->
-                    <div class="md:col-span-8 tonal-layer-1 p-8 rounded-2xl flex flex-col justify-between overflow-hidden relative group">
-                        <div class="relative z-10">
-                            <span class="material-symbols-outlined text-[#fe7f2d] text-4xl mb-4">hub</span>
-                            <h3 class="font-headline-lg text-headline-lg mb-4">Detects all LLMs</h3>
-                            <p class="font-body-md text-on-surface-variant max-w-md">Our neural network is trained on billions of parameters across Claude, GPT-4, Llama, and Mistral, identifying fine-tuned signatures with 99.1% accuracy.</p>
-                        </div>
-                        <div class="mt-8 flex flex-wrap gap-3">
-                            <span class="px-3 py-1 bg-surface-container-high border border-outline-variant rounded font-mono-data text-xs">GPT-4o</span>
-                            <span class="px-3 py-1 bg-surface-container-high border border-outline-variant rounded font-mono-data text-xs">Claude 3.5 Sonnet</span>
-                            <span class="px-3 py-1 bg-surface-container-high border border-outline-variant rounded font-mono-data text-xs">Llama 3</span>
-                            <span class="px-3 py-1 bg-surface-container-high border border-outline-variant rounded font-mono-data text-xs">Gemini Pro</span>
-                        </div>
-                        <div class="absolute right-0 bottom-0 opacity-20 group-hover:opacity-40 transition-opacity p-4">
-                            <span class="material-symbols-outlined text-[160px] translate-x-1/4 translate-y-1/4">dynamic_form</span>
-                        </div>
-                    </div>
-                    <!-- Feature 2: Privacy -->
-                    <div class="md:col-span-4 tonal-layer-1 p-8 rounded-2xl flex flex-col group border-l-4 border-secondary">
-                        <span class="material-symbols-outlined text-secondary text-4xl mb-4">encrypted</span>
-                        <h3 class="font-headline-lg text-headline-lg mb-4">Free &amp; Private</h3>
-                        <p class="font-body-md text-on-surface-variant">Your data is safe. We process documents in volatile memory; nothing is stored or used for further model training without explicit consent.</p>
-                        <div class="mt-auto pt-8">
-                            <div class="font-label-caps text-label-caps text-secondary mb-2">GDPR COMPLIANT</div>
-                            <div class="w-full h-1 bg-surface-container-high rounded-full overflow-hidden">
-                                <div class="h-full bg-secondary w-full"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Feature 3: Per-Paragraph -->
-                    <div class="md:col-span-4 tonal-layer-1 p-8 rounded-2xl flex flex-col">
-                        <span class="material-symbols-outlined text-primary text-4xl mb-4">segment</span>
-                        <h3 class="font-headline-lg text-headline-lg mb-4">Per-paragraph analysis</h3>
-                        <p class="font-body-md text-on-surface-variant">Go beyond a single score. Our engine highlights exactly which sections are human-authored and which are suspicious.</p>
-                    </div>
-                    <!-- Feature 4: Instant Results -->
-                    <div class="md:col-span-8 tonal-layer-1 p-8 rounded-2xl flex items-center gap-8 group">
-                        <div class="flex-1">
-                            <span class="material-symbols-outlined text-error text-4xl mb-4">bolt</span>
-                            <h3 class="font-headline-lg text-headline-lg mb-4">Instant results</h3>
-                            <p class="font-body-md text-on-surface-variant">Advanced parallel processing allows us to analyze up to 10,000 words in under 3 seconds. No more waiting for reports.</p>
-                        </div>
-                        <div class="hidden sm:block w-48 h-32 relative">
-                            <div class="w-full h-full bg-cover bg-center rounded-xl grayscale group-hover:grayscale-0 transition-all duration-500" style="background: radial-gradient(circle, #252830 0%, #111 100%); display: flex; align-items: center; justify-content: center;">
-                                <span class="material-symbols-outlined text-secondary text-5xl animate-bounce">bolt</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Dynamic Visualization Section -->
-            <section class="py-24 bg-surface-container-lowest">
-                <div class="max-w-container-max mx-auto px-margin-desktop flex flex-col md:flex-row items-center gap-16">
-                    <div class="w-full md:w-1/2">
-                        <h2 class="font-headline-xl text-headline-xl mb-6">Analytical Clarity for Every Sentence</h2>
-                        <p class="font-body-md text-body-md text-on-surface-variant mb-stack-lg leading-relaxed">
-                            Detecting AI isn't about guessing. It's about statistical probability. Our system calculates **Perplexity** (predictability of word choices) and **Burstiness** (variation in sentence structure) to give you an unambiguous verdict.
-                        </p>
-                        <ul class="space-y-4">
-                            <li class="flex items-center gap-3">
-                                <span class="material-symbols-outlined text-secondary">check_circle</span>
-                                <span class="font-body-md">99.1% True Positive Rate</span>
-                            </li>
-                            <li class="flex items-center gap-3">
-                                <span class="material-symbols-outlined text-secondary">check_circle</span>
-                                <span class="font-body-md">Low False-Positive Safeguards</span>
-                            </li>
-                            <li class="flex items-center gap-3">
-                                <span class="material-symbols-outlined text-secondary">check_circle</span>
-                                <span class="font-body-md">Multilingual Support (30+ Languages)</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="w-full md:w-1/2 relative h-[350px] tonal-layer-1 rounded-2xl overflow-hidden flex flex-col items-center justify-center p-8 bg-surface-container">
-                        <span class="material-symbols-outlined text-6xl text-brand-orange animate-pulse">analytics</span>
-                        <div class="mt-6 text-center">
-                            <h4 class="font-headline-lg text-lg text-on-background">Advanced Linguistic Modeling</h4>
-                            <p class="text-sm text-on-surface-variant mt-2 max-w-sm">Detecting subtle variations in sentence syntax and term frequency entropy across diverse generative structures.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </section>
-
-
         <!-- ================= UPLOAD / PASTE VIEW ================= -->
         <section id="view-upload" class="view-section hidden py-16">
             <div class="max-w-3xl w-full mx-auto px-margin-mobile md:px-0">
-                <header class="text-center mb-stack-lg">
+                <header class="text-center mb-6">
                     <h1 class="font-headline-xl text-headline-xl text-on-surface mb-2">Upload or Paste Content</h1>
                     <p class="text-on-surface-variant font-body-md">Verify the authenticity of your text with high-precision scanning.</p>
                 </header>
+
+                <!-- Try Sample Quick Action Buttons -->
+                <div class="flex gap-4 justify-center mb-8">
+                    <button onclick="trySampleText(1)" class="bg-transparent border border-outline-variant text-on-surface hover:bg-surface-container-high transition-all rounded-xl px-5 py-2.5 font-semibold text-sm flex items-center justify-center gap-2">
+                        <span class="material-symbols-outlined text-lg">description</span>
+                        Try AI Sample
+                    </button>
+                    <button onclick="trySampleText(2)" class="bg-transparent border border-outline-variant text-on-surface hover:bg-surface-container-high transition-all rounded-xl px-5 py-2.5 font-semibold text-sm flex items-center justify-center gap-2">
+                        <span class="material-symbols-outlined text-lg">person</span>
+                        Try Human Sample
+                    </button>
+                </div>
 
                 <!-- Input Selection Tabs -->
                 <div class="flex border-b border-outline-variant mb-6 justify-center">
@@ -388,8 +247,8 @@
                             <span class="material-symbols-outlined">search_check</span>
                             Analyze
                         </button>
-                        <button class="border border-outline-variant text-on-surface hover:bg-surface-variant px-12 py-4 rounded-lg font-bold text-lg transition-all" onclick="navigateTo('home')">
-                            Cancel
+                        <button class="border border-outline-variant text-on-surface hover:bg-surface-variant px-12 py-4 rounded-lg font-bold text-lg transition-all" onclick="resetFileUpload()">
+                            Clear
                         </button>
                     </div>
                 </div>
@@ -404,8 +263,8 @@
                             <span class="material-symbols-outlined">search_check</span>
                             Analyze Text
                         </button>
-                        <button class="border border-outline-variant text-on-surface hover:bg-surface-variant px-12 py-4 rounded-lg font-bold text-lg transition-all" onclick="navigateTo('home')">
-                            Cancel
+                        <button class="border border-outline-variant text-on-surface hover:bg-surface-variant px-12 py-4 rounded-lg font-bold text-lg transition-all" onclick="resetPasteArea()">
+                            Clear
                         </button>
                     </div>
                 </div>
@@ -661,7 +520,7 @@
 
         // App state
         let appState = {
-            currentView: 'home',
+            currentView: 'upload',
             currentFileName: '',
             currentFileSize: '',
             currentText: '',
@@ -689,19 +548,36 @@
             }
 
             // Update nav link styles
-            const navHome = document.getElementById('nav-home');
             const navScan = document.getElementById('nav-scan');
-            
-            if (viewName === 'home') {
-                navHome.className = "font-body-md text-body-md text-secondary font-bold border-b-2 border-secondary pb-1 transition-all";
-                navScan.className = "font-body-md text-body-md text-on-surface-variant hover:text-secondary transition-colors duration-200";
-            } else if (viewName === 'upload' || viewName === 'analyzing' || viewName === 'results') {
-                navScan.className = "font-body-md text-body-md text-secondary font-bold border-b-2 border-secondary pb-1 transition-all";
-                navHome.className = "font-body-md text-body-md text-on-surface-variant hover:text-secondary transition-colors duration-200";
+            if (navScan) {
+                if (viewName === 'upload') {
+                    navScan.className = "font-body-md text-body-md text-secondary font-bold border-b-2 border-secondary pb-1 transition-all";
+                } else {
+                    navScan.className = "font-body-md text-body-md text-on-surface-variant hover:text-secondary transition-colors duration-200";
+                }
             }
 
             appState.currentView = viewName;
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Reset utility functions
+        function resetFileUpload() {
+            appState.currentFileName = '';
+            appState.currentFileSize = '';
+            appState.currentText = '';
+            document.getElementById('file-input').value = '';
+            document.getElementById('selected-file-name').innerText = 'Drag & Drop file here, or click to browse';
+            document.getElementById('selected-file-info').innerText = 'Supports PDF, DOCX, TXT (Max 50MB)';
+            const uploadIcon = document.getElementById('upload-icon');
+            uploadIcon.innerText = 'upload_file';
+            uploadIcon.classList.remove('text-secondary');
+            uploadIcon.classList.add('text-brand-orange');
+        }
+
+        function resetPasteArea() {
+            document.getElementById('paste-textarea').value = '';
+            appState.currentText = '';
         }
 
         // Toggle Upload Mode (File vs Paste)
@@ -1089,7 +965,7 @@
 
         // Initial setup
         window.onload = function() {
-            navigateTo('home');
+            navigateTo('upload');
         };
     </script>
 </body>
