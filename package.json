@@ -1,0 +1,12 @@
+{
+  "name": "ai-content-detector",
+  "version": "1.0.0",
+  "description": "Local dev workspace for Google Stitch AI Content Analyzer UI",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "author": "Antigravity",
+  "license": "ISC"
+}

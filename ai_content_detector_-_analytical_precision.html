@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Content Detector - Analytical Precision</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;family=Geist:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;family=Hanken+Grotesk:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .accent-glow-orange {
+            box-shadow: 0 0 15px rgba(254, 127, 45, 0.3);
+        }
+        .tonal-layer-1 {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .tonal-layer-2 {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        .hero-gradient {
+            background: radial-gradient(circle at 50% 50%, #233d4d 0%, #121315 100%);
+        }
+        .scanner-line {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #fe7f2d, transparent);
+            position: absolute;
+            width: 100%;
+            top: 0;
+            animation: scan 4s linear infinite;
+        }
+        @keyframes scan {
+            0% { top: 0; }
+            100% { top: 100%; }
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary-fixed-variant": "#5d4124",
+                      "primary-fixed": "#cbe6fb",
+                      "surface-container-highest": "#343536",
+                      "on-secondary-fixed": "#251a00",
+                      "surface-variant": "#343536",
+                      "tertiary-fixed-dim": "#e7bf99",
+                      "secondary": "#f1c03c",
+                      "secondary-fixed": "#ffdf97",
+                      "on-primary": "#193343",
+                      "surface": "#121315",
+                      "error": "#ffb4ab",
+                      "surface-tint": "#afcade",
+                      "tertiary": "#e7bf99",
+                      "inverse-on-surface": "#2f3032",
+                      "surface-container": "#1f2021",
+                      "outline-variant": "#42474c",
+                      "on-primary-fixed-variant": "#304a5a",
+                      "inverse-primary": "#486273",
+                      "background": "#121315",
+                      "tertiary-fixed": "#ffdcbd",
+                      "on-background": "#e3e2e3",
+                      "surface-container-high": "#292a2b",
+                      "error-container": "#93000a",
+                      "tertiary-container": "#4f3519",
+                      "secondary-fixed-dim": "#f1c03c",
+                      "on-secondary-fixed-variant": "#5a4300",
+                      "on-primary-container": "#8da8bb",
+                      "on-tertiary": "#442b10",
+                      "primary-fixed-dim": "#afcade",
+                      "on-tertiary-fixed": "#2c1701",
+                      "inverse-surface": "#e3e2e3",
+                      "on-surface": "#e3e2e3",
+                      "surface-container-lowest": "#0d0e0f",
+                      "on-surface-variant": "#c2c7cc",
+                      "surface-dim": "#121315",
+                      "surface-container-low": "#1a1c1d",
+                      "surface-bright": "#38393a",
+                      "on-tertiary-container": "#c39e7a",
+                      "on-secondary": "#3e2e00",
+                      "secondary-container": "#bb9000",
+                      "primary-container": "#233d4d",
+                      "on-error": "#690005",
+                      "on-error-container": "#ffdad6",
+                      "on-secondary-container": "#3c2c00",
+                      "outline": "#8c9196",
+                      "primary": "#afcade",
+                      "on-primary-fixed": "#011e2d"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "gutter": "24px",
+                      "stack-lg": "32px",
+                      "stack-sm": "8px",
+                      "container-max": "1280px",
+                      "margin-mobile": "16px",
+                      "margin-desktop": "40px",
+                      "stack-md": "16px"
+              },
+              "fontFamily": {
+                      "headline-xl": ["Hanken Grotesk"],
+                      "body-md": ["Hanken Grotesk"],
+                      "mono-data": ["Geist"],
+                      "headline-lg-mobile": ["Hanken Grotesk"],
+                      "headline-lg": ["Hanken Grotesk"],
+                      "body-sm": ["Hanken Grotesk"],
+                      "label-caps": ["Geist"]
+              },
+              "fontSize": {
+                      "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "mono-data": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col selection:bg-secondary selection:text-on-secondary-fixed">
+<!-- TopNavBar -->
+<header class="bg-surface-container w-full top-0 border-b border-outline-variant z-50 sticky">
+<nav class="flex justify-between items-center h-16 px-margin-desktop max-w-container-max mx-auto">
+<div class="flex items-center gap-stack-md">
+<span class="font-headline-lg text-headline-lg font-bold text-secondary">AI Detector</span>
+</div>
+<div class="hidden md:flex gap-8 items-center">
+<a class="font-body-md text-body-md text-secondary font-bold border-b-2 border-secondary pb-1 transition-all" href="#">Home</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface hover:text-secondary transition-colors duration-200" href="#">History</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface hover:text-secondary transition-colors duration-200" href="#">About</a>
+</div>
+<div class="flex items-center gap-stack-md">
+<button class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface active:opacity-80 transition-all px-4 py-2">Login</button>
+<button class="bg-[#fe7f2d] text-white px-6 py-2 font-semibold accent-glow-orange hover:brightness-110 active:opacity-80 transition-all rounded-lg">Get Started</button>
+</div>
+</nav>
+</header>
+<main class="flex-grow">
+<!-- Hero Section -->
+<section class="relative overflow-hidden hero-gradient py-24 md:py-32">
+<!-- Atmospheric Shader Background -->
+
+<div class="max-w-container-max mx-auto px-margin-desktop relative z-10 flex flex-col items-center text-center">
+<div class="inline-flex items-center gap-2 px-3 py-1 tonal-layer-1 rounded-full mb-stack-lg border border-outline-variant/30">
+<span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">New: Per-Paragraph Analysis Engine</span>
+</div>
+<h1 class="font-headline-xl text-headline-xl md:text-[64px] md:leading-[72px] mb-6 max-w-4xl">
+                    AI Content Detector
+                </h1>
+<p class="font-body-md text-body-md md:text-xl text-on-surface-variant max-w-2xl mb-stack-lg">
+                    Find out how much AI-generated content is in your document. Precise, instant verification for educators, editors, and professionals.
+                </p>
+<div class="flex flex-col sm:flex-row gap-stack-md w-full sm:w-auto">
+<button class="bg-[#fe7f2d] text-white px-8 py-4 font-semibold text-lg accent-glow-orange hover:brightness-110 hover:-translate-y-0.5 active:translate-y-0 transition-all rounded-xl flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">upload_file</span>
+                        Upload Document
+                    </button>
+<button class="bg-transparent border border-outline-variant text-on-surface px-8 py-4 font-semibold text-lg hover:bg-surface-container-high transition-all rounded-xl flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">description</span>
+                        Try Sample
+                    </button>
+</div>
+<!-- Analysis Preview Card -->
+<div class="mt-20 w-full max-w-4xl relative tonal-layer-1 p-stack-lg rounded-xl overflow-hidden group">
+<div class="scanner-line"></div>
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8 border-b border-outline-variant pb-6">
+<div class="text-left">
+<span class="font-label-caps text-label-caps text-on-tertiary-fixed-variant uppercase tracking-widest">Active Analysis</span>
+<div class="font-headline-lg text-headline-lg text-primary-fixed mt-1">document_draft_v2.docx</div>
+</div>
+<div class="flex gap-4">
+<div class="tonal-layer-2 px-4 py-2 rounded-lg text-center min-w-[100px]">
+<div class="font-mono-data text-mono-data text-secondary">82%</div>
+<div class="font-label-caps text-label-caps opacity-60">PROBABILITY</div>
+</div>
+<div class="tonal-layer-2 px-4 py-2 rounded-lg text-center min-w-[100px]">
+<div class="font-mono-data text-mono-data text-tertiary">14.2</div>
+<div class="font-label-caps text-label-caps opacity-60">BURSTINESS</div>
+</div>
+</div>
+</div>
+<div class="text-left font-body-md text-on-surface-variant leading-relaxed space-y-4">
+<p class="p-2 border-l-2 border-transparent hover:border-secondary hover:bg-surface-container transition-all">
+                            Large language models are transforming how we communicate. However, the need for transparency in academic and professional writing remains paramount.
+                        </p>
+<p class="p-2 bg-[#fe7f2d]/10 border-l-2 border-[#fe7f2d] text-on-surface">
+                            This specific paragraph shows significant markers of AI influence. The syntactic structure exhibits low perplexity scores and predictable burstiness patterns commonly associated with GPT-4 outputs.
+                        </p>
+<p class="p-2 border-l-2 border-transparent">
+                            As detection tools evolve, human verification remains the ultimate standard for content authenticity and brand trust.
+                        </p>
+</div>
+</div>
+</div>
+</section>
+<!-- Features Bento Grid -->
+<section class="py-24 px-margin-desktop max-w-container-max mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Feature 1: LLM Coverage -->
+<div class="md:col-span-8 tonal-layer-1 p-8 rounded-2xl flex flex-col justify-between overflow-hidden relative group">
+<div class="relative z-10">
+<span class="material-symbols-outlined text-[#fe7f2d] text-4xl mb-4">hub</span>
+<h3 class="font-headline-lg text-headline-lg mb-4">Detects all LLMs</h3>
+<p class="font-body-md text-on-surface-variant max-w-md">Our neural network is trained on billions of parameters across Claude, GPT-4, Llama, and Mistral, identifying fine-tuned signatures with 99.1% accuracy.</p>
+</div>
+<div class="mt-8 flex flex-wrap gap-3">
+<span class="px-3 py-1 bg-surface-container-high border border-outline-variant rounded font-mono-data text-xs">GPT-4o</span>
+<span class="px-3 py-1 bg-surface-container-high border border-outline-variant rounded font-mono-data text-xs">Claude 3.5 Sonnet</span>
+<span class="px-3 py-1 bg-surface-container-high border border-outline-variant rounded font-mono-data text-xs">Llama 3</span>
+<span class="px-3 py-1 bg-surface-container-high border border-outline-variant rounded font-mono-data text-xs">Gemini Pro</span>
+</div>
+<div class="absolute right-0 bottom-0 opacity-20 group-hover:opacity-40 transition-opacity p-4">
+<span class="material-symbols-outlined text-[160px] translate-x-1/4 translate-y-1/4">dynamic_form</span>
+</div>
+</div>
+<!-- Feature 2: Privacy -->
+<div class="md:col-span-4 tonal-layer-1 p-8 rounded-2xl flex flex-col group border-l-4 border-secondary">
+<span class="material-symbols-outlined text-secondary text-4xl mb-4">encrypted</span>
+<h3 class="font-headline-lg text-headline-lg mb-4">Free &amp; Private</h3>
+<p class="font-body-md text-on-surface-variant">Your data is yours. We process documents in volatile memory; nothing is stored or used for further model training without explicit consent.</p>
+<div class="mt-auto pt-8">
+<div class="font-label-caps text-label-caps text-secondary mb-2">GDPR COMPLIANT</div>
+<div class="w-full h-1 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-full"></div>
+</div>
+</div>
+</div>
+<!-- Feature 3: Per-Paragraph -->
+<div class="md:col-span-4 tonal-layer-1 p-8 rounded-2xl flex flex-col">
+<span class="material-symbols-outlined text-primary text-4xl mb-4">segment</span>
+<h3 class="font-headline-lg text-headline-lg mb-4">Per-paragraph analysis</h3>
+<p class="font-body-md text-on-surface-variant">Go beyond a single score. Our engine highlights exactly which sections are human-authored and which are suspicious.</p>
+</div>
+<!-- Feature 4: Instant Results -->
+<div class="md:col-span-8 tonal-layer-1 p-8 rounded-2xl flex items-center gap-8 group">
+<div class="flex-1">
+<span class="material-symbols-outlined text-error text-4xl mb-4">bolt</span>
+<h3 class="font-headline-lg text-headline-lg mb-4">Instant results</h3>
+<p class="font-body-md text-on-surface-variant">Advanced parallel processing allows us to analyze up to 10,000 words in under 3 seconds. No more waiting for reports.</p>
+</div>
+<div class="hidden sm:block w-48 h-32 relative">
+<div class="w-full h-full bg-cover bg-center rounded-xl grayscale group-hover:grayscale-0 transition-all duration-500" data-alt="A high-tech digital visualization of data packets moving at lightning speed through a neural network grid, neon orange and electric blue highlights, dark sleek dashboard aesthetic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCWQZMLctmj6B9Om6mCs2yj2pvvbwZrJ1kwps-YJWmxCUNFDwm-PFyvYHfGbDfgE0pEtemVZ-9VOqlFr-PzCx6755nos6TehJgb0o6H1T1AaGUvaoz_P6YawCI25nVNJVvI25Jy-9rRXf6WyFy0n_97BV6_N1MBCFDLh3cjimKEEXWYP5WzGGT3f2Li1TGj2L8J8ePZu7MfipontNtQliFPASvRpGk9D3B1H2KNeP5qdfWWv_SgqKyJ3ZA5rLF2joPFeiGKrmOtsxg')"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Dynamic Visualization Section -->
+<section class="py-24 bg-surface-container-lowest">
+<div class="max-w-container-max mx-auto px-margin-desktop flex flex-col md:flex-row items-center gap-16">
+<div class="w-full md:w-1/2">
+<h2 class="font-headline-xl text-headline-xl mb-6">Analytical Clarity for Every Sentence</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-stack-lg leading-relaxed">
+                        Detecting AI isn't about guessing. It's about statistical probability. Our system calculates **Perplexity** (predictability of word choices) and **Burstiness** (variation in sentence structure) to give you an unambiguous verdict.
+                    </p>
+<ul class="space-y-4">
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">check_circle</span>
+<span class="font-body-md">99.1% True Positive Rate</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">check_circle</span>
+<span class="font-body-md">Low False-Positive Safeguards</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">check_circle</span>
+<span class="font-body-md">Multilingual Support (30+ Languages)</span>
+</li>
+</ul>
+</div>
+<div class="w-full md:w-1/2 relative h-[400px] tonal-layer-1 rounded-2xl overflow-hidden flex items-center justify-center p-8">
+
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="py-32 px-margin-desktop max-w-4xl mx-auto text-center">
+<h2 class="font-headline-xl text-headline-xl mb-8">Ready to verify your content?</h2>
+<div class="tonal-layer-1 p-12 rounded-3xl border-2 border-dashed border-outline-variant/50 hover:border-[#fe7f2d]/50 transition-all cursor-pointer group">
+<div class="mb-6 inline-block p-4 rounded-full bg-surface-container-high group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-5xl text-secondary">upload_file</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg mb-2">Drop your files here</h3>
+<p class="text-on-surface-variant mb-8">Supports PDF, DOCX, TXT (Max 50MB)</p>
+<button class="bg-[#fe7f2d] text-white px-10 py-4 font-bold rounded-xl accent-glow-orange hover:brightness-110 transition-all">
+                    Upload &amp; Scan Now
+                </button>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest w-full border-t border-outline-variant">
+<div class="flex flex-col md:flex-row justify-between items-center py-stack-lg px-margin-desktop w-full max-w-container-max mx-auto mt-auto">
+<div class="mb-stack-md md:mb-0">
+<span class="font-headline-sm text-headline-sm font-semibold text-on-surface">AI Detector</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Made by AI Detector © 2024</p>
+</div>
+<div class="flex gap-8">
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary underline decoration-secondary transition-all duration-300" href="#">Privacy Policy</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary underline decoration-secondary transition-all duration-300" href="#">Terms of Service</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary underline decoration-secondary transition-all duration-300" href="#">Contact</a>
+</div>
+<div class="mt-stack-md md:mt-0 flex gap-4">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-on-surface">public</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-on-surface">share</span>
+</div>
+</div>
+</footer>
+<script>
+        // Micro-interaction for smooth scrolling or hover effects can be added here
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('mousedown', () => {
+                button.style.transform = 'scale(0.98)';
+            });
+            button.addEventListener('mouseup', () => {
+                button.style.transform = '';
+            });
+        });
+    </script>
+</body></html>
