@@ -1,10 +1,10 @@
 import re
 import math
 import logging
-from typing import List, Dict
+from typing import List, Dict, Tuple
 import numpy as np
 import torch
-from transformers import GPT2Tokenizer, GPT2LMHeadModel
+from transformers import GPT2Tokenizer, GPT2LMHeadModel, pipeline
 import textstat
 import nltk
 
@@ -25,18 +25,46 @@ class AIContentDetector:
     def __init__(self):
         # Force CPU if CUDA execution is not needed or fails, fallback to CPU
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
-        logger.info(f"Loading GPT-2 model and tokenizer on device: {self.device}")
+        logger.info(f"Loading models on device: {self.device}")
         
         try:
-            # Load tokenizer and model once at startup
-            # Using float32 precision for precision and CPU compatibility
+            # Load GPT-2 tokenizer and model
+            logger.info("Loading GPT-2 model and tokenizer...")
             self.tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
             self.model = GPT2LMHeadModel.from_pretrained('gpt2').to(self.device)
-            self.model.eval()  # Set model to evaluation mode
-            logger.info("GPT-2 model loaded successfully.")
+            self.model.eval()
+            logger.info("✓ GPT-2 model loaded")
         except Exception as e:
             logger.error(f"Failed to load GPT-2 model: {str(e)}")
             raise e
+        
+        try:
+            # Load RoBERTa OpenAI Detector (detects GPT-generated text)
+            logger.info("Loading RoBERTa GPT-2 detector...")
+            self.gpt_detector = pipeline(
+                "text-classification",
+                model="openai-community/roberta-base-openai-detector",
+                device=0 if self.device == "cuda" else -1
+            )
+            logger.info("✓ RoBERTa detector loaded")
+            self.roberta_available = True
+        except Exception as e:
+            logger.warning(f"RoBERTa detector not available: {e}")
+            self.roberta_available = False
+        
+        try:
+            # Load sentiment analyzer (detects tone inconsistencies)
+            logger.info("Loading sentiment analyzer...")
+            self.sentiment_pipeline = pipeline(
+                "sentiment-analysis",
+                model="distilbert-base-uncased-finetuned-sst-2-english",
+                device=0 if self.device == "cuda" else -1
+            )
+            logger.info("✓ Sentiment analyzer loaded")
+            self.sentiment_available = True
+        except Exception as e:
+            logger.warning(f"Sentiment analyzer not available: {e}")
+            self.sentiment_available = False
 
     def calculate_perplexity(self, text: str) -> float:
         """
@@ -214,14 +242,38 @@ class AIContentDetector:
         else:
             ent_score = 1.0 - (norm_ent - min_ent) / (max_ent - min_ent)
 
-        # Ensemble Score (average of the three normalized indicators)
-        ensemble = (ppl_score + burst_score + ent_score) / 3.0
+        # Add Hugging Face model scores to ensemble
+        scores = [ppl_score, burst_score, ent_score]
+        
+        # RoBERTa GPT detector (optional, if available)
+        roberta_score = self.roberta_gpt_detection(p_text)
+        if self.roberta_available:
+            scores.append(roberta_score)
+        
+        # Sentiment consistency score (optional, if available)
+        sentences = [s.strip() for s in p_text.split('.') if s.strip()]
+        sentiment_score = self.sentiment_consistency_score(sentences)
+        if self.sentiment_available:
+            # Invert sentiment score (high consistency = low AI score)
+            scores.append(1.0 - sentiment_score)
+        
+        # Ensemble Score (weighted average)
+        # Statistical methods: 60% weight (proven across all LLMs)
+        # HuggingFace models: 40% weight (better for GPT detection)
+        stat_ensemble = (ppl_score + burst_score + ent_score) / 3.0
+        
+        if len(scores) > 3:
+            # Include HF models
+            hf_ensemble = sum(scores[3:]) / (len(scores) - 3)
+            ensemble = (stat_ensemble * 0.6) + (hf_ensemble * 0.4)
+        else:
+            ensemble = stat_ensemble
+        
         ai_percentage = round(ensemble * 100)
 
-        # Confidence calculation (base on variance of individual indicators)
-        scores = [ppl_score, burst_score, ent_score]
-        mean_score = sum(scores) / 3.0
-        var_score = sum((s - mean_score) ** 2 for s in scores) / 3.0
+        # Confidence calculation (based on variance of individual indicators)
+        mean_score = sum(scores) / len(scores)
+        var_score = sum((s - mean_score) ** 2 for s in scores) / len(scores)
         std_dev = math.sqrt(var_score)
         
         # 100 if all agree, decreases if they disagree
@@ -240,15 +292,86 @@ class AIContentDetector:
         else:
             flag = "Very High"
 
-        return {
+        result = {
             "text": paragraph,
             "ai_score": ai_percentage,
             "confidence": confidence,
-            "perplexity_score": round(ppl_score, 4),
-            "burstiness_score": round(burst_score, 4),
-            "entropy_score": round(ent_score, 4),
-            "flag": flag
+            "metrics": {
+                "perplexity": round(ppl_score, 4),
+                "burstiness": round(burst_score, 4),
+                "entropy": round(ent_score, 4),
+            },
+            "flag": flag,
+            "models_used": {
+                "statistical": True,
+                "roberta": self.roberta_available,
+                "sentiment": self.sentiment_available
+            }
         }
+        
+        # Add HF scores if available
+        if self.roberta_available:
+            result["metrics"]["roberta_score"] = round(roberta_score, 4)
+        if self.sentiment_available:
+            result["metrics"]["sentiment_consistency"] = round(sentiment_score, 4)
+        
+        return result
+
+    def roberta_gpt_detection(self, text: str) -> float:
+        """
+        Use RoBERTa model to detect GPT-generated text.
+        Returns score between 0-1 (higher = more likely AI).
+        """
+        if not self.roberta_available or not text.strip():
+            return 0.5
+        
+        try:
+            # Truncate to max tokens (512 for RoBERTa)
+            text = text[:512]
+            result = self.gpt_detector(text)[0]
+            
+            # Result format: {"label": "Fake" or "Real", "score": float}
+            if result["label"] == "Fake":
+                return min(result["score"], 1.0)
+            else:
+                return 1.0 - min(result["score"], 1.0)
+        except Exception as e:
+            logger.warning(f"RoBERTa detection error: {e}")
+            return 0.5
+    
+    def sentiment_consistency_score(self, sentences: List[str]) -> float:
+        """
+        Analyze sentiment consistency across sentences.
+        AI text often has abrupt tone shifts (humanizers create unnatural transitions).
+        Returns score 0-1 (higher = more consistent/likely human).
+        """
+        if not self.sentiment_available or len(sentences) < 2:
+            return 0.5
+        
+        try:
+            sentiments = []
+            for sent in sentences[:10]:  # Analyze first 10 sentences
+                if sent.strip():
+                    result = self.sentiment_pipeline(sent[:512])[0]
+                    # Normalize sentiment score
+                    if result["label"] == "POSITIVE":
+                        sentiments.append(result["score"])
+                    else:
+                        sentiments.append(1.0 - result["score"])
+            
+            if len(sentiments) < 2:
+                return 0.5
+            
+            # Calculate standard deviation of sentiments
+            # Lower std = more consistent (more human-like)
+            std_dev = np.std(sentiments)
+            
+            # Convert to human-likelihood score (lower std = higher score)
+            consistency = 1.0 - min(std_dev, 1.0)
+            return consistency
+        except Exception as e:
+            logger.warning(f"Sentiment analysis error: {e}")
+            return 0.5
 
     def analyze_document(self, paragraphs: List[str]) -> Dict[str, any]:
         """

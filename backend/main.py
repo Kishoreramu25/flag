@@ -60,11 +60,16 @@ SUPPORTED_EXTENSIONS = {'.pdf', '.docx', '.txt', '.md', '.html', '.css', '.js', 
 
 @app.get("/health", status_code=status.HTTP_200_OK)
 def health_check():
-    """Simple health check endpoint"""
+    """Health check endpoint with model status"""
     status_info = {
-        "status": "healthy",
+        "status": "healthy" if detector else "unhealthy",
         "model_loaded": detector is not None,
-        "device": detector.device if detector else "unknown"
+        "device": detector.device if detector else "unknown",
+        "models": {
+            "gpt2_loaded": detector is not None,
+            "roberta_detector": detector.roberta_available if detector else False,
+            "sentiment_analyzer": detector.sentiment_available if detector else False
+        }
     }
     return status_info
 
